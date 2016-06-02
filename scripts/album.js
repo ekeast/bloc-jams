@@ -88,5 +88,6 @@ document.getElementsByClassName('album-cover-art')[0].addEventListener('click', 
     if (albumNumber == albumArray.length ) {
         albumNumber = 0;
     }
-    setCurrentAlbum(albumArray[albumNumber]); });
+    setCurrentAlbum(albumArray[albumNumber]); 
+});
     
