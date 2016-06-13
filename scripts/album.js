@@ -23,6 +23,7 @@ var setSong = function(songNumber) {
              var $seekBar = $('.seek-control .seek-bar');
  
              updateSeekPercentage($seekBar, seekBarFillRatio);
+             setCurrentTimeInPlayerBar(this.getTime());
          });
      }
  };
@@ -111,7 +112,7 @@ var createSongRow = function(songNumber, songName, songLength) {
         '<tr class="album-view-song-item">'
       + '  <td class="song-item-number" data-song-number="' + songNumber + '">' + songNumber + '</td>'
       + '  <td class="song-item-title">' + songName + '</td>'
-      + '  <td class="song-item-duration">' + songLength + '</td>'
+      + '  <td class="song-item-duration">' + filterTimeCode(songLength) + '</td>'
       + '</tr>'
       ;
  
@@ -277,12 +278,11 @@ var previousSong = function() {
 
 
 var updatePlayerBarSong = function() {
-
+    setTotalTimeInPlayerBar(currentSongFromAlbum.duration);
     $('.currently-playing .song-name').text(currentSongFromAlbum.title);
     $('.currently-playing .artist-name').text(currentAlbum.artist);
     $('.currently-playing .artist-song-mobile').text(currentSongFromAlbum.title + " - " + currentAlbum.artist);
     $('.main-controls .play-pause').html(playerBarPauseButton);
-
 };
 
 var getNumberCell = function(number){
@@ -320,6 +320,27 @@ var togglePlayFromPlayerBar = function() {
         currentSoundFile.pause();
     }
 };
+
+var filterTimeCode = function(timeInSeconds) {
+  var timeInNumbers = parseFloat(timeInSeconds);
+  var rounded = Math.floor(timeInNumbers);
+  var minutes = rounded / 60;
+  var seconds = rounded % 60;
+  var tens = seconds / 10;
+  var ones = seconds % 10;
+  return Math.floor(minutes) + ":" + Math.floor(tens) + Math.floor(ones);
+};
+
+var setCurrentTimeInPlayerBar = function(currentTime) {
+    var $time = $('.current-time');
+    $time.text(filterTimeCode(currentTime));
+};
+
+var setTotalTimeInPlayerBar = function(totalTime) {
+    var $time = $('.total-time');
+    $time.text(filterTimeCode(totalTime));
+};
+
 
 $(document).ready(function() {
      setCurrentAlbum(albumPicasso);
