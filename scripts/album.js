@@ -148,7 +148,7 @@ var createSongRow = function(songNumber, songName, songLength) {
              }
              else {
                  $(this).html(playButtonTemplate);
-                 $('.maincontrols .play-pause').html(playerBarPauseButton);
+                 $('.main-controls .play-pause').html(playerBarPlayButton);
                  currentSoundFile.pause();
              }
          }
@@ -210,7 +210,6 @@ var nextSong = function() {
         return index == 0 ? currentAlbum.songs.length : index;
     };
     
-    currentSoundFile.play();
     updateSeekBarWhileSongPlays();
     
     var currentSongIndex = trackIndex(currentAlbum, currentSongFromAlbum);
@@ -223,11 +222,11 @@ var nextSong = function() {
 
     currentlyPlayingSongNumber = currentSongIndex + 1;
     currentSongFromAlbum = currentAlbum.songs[currentSongIndex];
+    
+    setSong(currentSongIndex + 1);
+    currentSoundFile.play();
 
-    $('.currently-playing .song-name').text(currentSongFromAlbum.title);
-    $('.currently-playing .artist-name').text(currentAlbum.artist);
-    $('.currently-playing .artist-song-mobile').text(currentSongFromAlbum.title + " - " + currentAlbum.title);
-    $('.main-controls .play-pause').html(playerBarPauseButton);
+    updatePlayerBarSong();
     
     var lastSongNumber = getLastSongNumber(currentSongIndex);
     var $nextSongNumberCell = $('.song-item-number[data-song-number="' + currentlyPlayingSongNumber + '"]');
@@ -249,22 +248,21 @@ var previousSong = function() {
     var currentSongIndex = trackIndex(currentAlbum, currentSongFromAlbum);
     // Note that we're _decrementing_ the index here
     currentSongIndex--;
+
     
     if (currentSongIndex < 0) {
         currentSongIndex = currentAlbum.songs.length - 1;
     }
     
     // Set a new current song
-    currentlyPlayingSongNumber = currentSongIndex + 1;
-    currentSongFromAlbum = currentAlbum.songs[currentSongIndex];
-    currentSoundFile.play();
     updateSeekBarWhileSongPlays();
+    
+    setSong(currentSongIndex + 1);
+    
+    currentSoundFile.play();
 
     // Update the Player Bar information
-    $('.currently-playing .song-name').text(currentSongFromAlbum.title);
-    $('.currently-playing .artist-name').text(currentAlbum.artist);
-    $('.currently-playing .artist-song-mobile').text(currentSongFromAlbum.title + " - " + currentAlbum.title);
-    $('.main-controls .play-pause').html(playerBarPauseButton);
+    updatePlayerBarSong();
     
     var lastSongNumber = getLastSongNumber(currentSongIndex);
     var $previousSongNumberCell = $('.song-item-number[data-song-number="' + currentlyPlayingSongNumber + '"]');
